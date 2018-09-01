@@ -42,14 +42,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="DriveDownloader.exe" size="55232">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="DriveDownloader.exe" size="55744">
       <assemblyIdentity name="DriveDownloader" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>SoLtd+OV/p8IKo/bBgQxOjCWOyPu4cKq0tWymHjkP2g=</dsig:DigestValue>
+        <dsig:DigestValue>UZi8P9FEukjzf5R6lSrYQzjFG7IwbN9VvSjOI332Mqg=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -170,6 +170,18 @@
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
         <dsig:DigestValue>bMDLzVxHCcahyX9VgcNH2T5YbnzA1kv/tNMsbnU0dqQ=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="PropertyChanged.dll" size="6144">
+      <assemblyIdentity name="PropertyChanged" version="2.5.9.0" publicKeyToken="EE3EE20BCF148DDD" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>2wAjBkzl2t8LecaHg83XyrVFx1ChHB+Kum3yyAcfv+o=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

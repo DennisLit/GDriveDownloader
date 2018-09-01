@@ -10,113 +10,170 @@
         mc:Ignorable="d"
         Background="White"
         Name="DriveMainWindow"
-        Title="MainWindow" Height="450" Width="930" WindowStyle="None" ResizeMode="NoResize">
-    <Window.Resources>
-        <ControlTemplate x:Key="RoundedButtonTemplate" TargetType="{x:Type Button}">
-            <Border x:Name="border" 
-                    CornerRadius="10" 
-                    BorderBrush="{TemplateBinding BorderBrush}" 
-                    BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True" Margin="0,3.6,-3.2,0" Opacity="100">
-                <ContentPresenter x:Name="contentPresenter" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" ContentStringFormat="{TemplateBinding ContentStringFormat}" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
-            </Border>
-            <ControlTemplate.Triggers>
-                <Trigger Property="IsDefaulted" Value="True">
-                    <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
-                </Trigger>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" TargetName="border" Value="#07A8FF"/>
-                    <Setter Property="BorderBrush" TargetName="border" Value="#0000"/>
-                </Trigger>
-                <Trigger Property="ToggleButton.IsChecked" Value="True">
-                    <Setter Property="Background" TargetName="border" Value="#FFBCDDEE"/>
-                    <Setter Property="BorderBrush" TargetName="border" Value="#FF245A83"/>
-                </Trigger>
-                <Trigger Property="IsEnabled" Value="False">
-                    <Setter Property="Background" TargetName="border" Value="#FFF4F4F4"/>
-                    <Setter Property="BorderBrush" TargetName="border" Value="#FFADB2B5"/>
-                    <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="#FF838383"/>
-                </Trigger>
-                <Trigger Property="IsMouseOver" Value="False">
-                    <Setter Property="Opacity" Value="100"></Setter>
-                </Trigger>
-            </ControlTemplate.Triggers>
-        </ControlTemplate>
-    </Window.Resources>
+        Title="MainWindow" Height="450" Width="930">
+
+    
     <Grid>
-       
+
         <Grid.RowDefinitions>
             <RowDefinition Height="6*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition></ColumnDefinition>
-        </Grid.ColumnDefinitions>
 
-        <ScrollViewer Grid.Row="0" Margin="0,0,0.2,0">
-            <Grid Name ="MainGrid">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" ></ColumnDefinition>
-                    <ColumnDefinition Width="Auto"></ColumnDefinition>
-                    <ColumnDefinition Width="Auto"></ColumnDefinition>
-                    <ColumnDefinition Width="Auto"></ColumnDefinition>
-                    <ColumnDefinition Width="Auto"></ColumnDefinition>
-                    <ColumnDefinition Width="Auto"></ColumnDefinition>
-                    <ColumnDefinition Width="Auto"></ColumnDefinition>
-                    <ColumnDefinition Width="Auto"></ColumnDefinition>
-                </Grid.ColumnDefinitions>
-            </Grid>
+        <ScrollViewer>
+            <ItemsControl ItemsSource="{Binding Files}">
+                <ItemsControl.ItemTemplate>
+
+                    <DataTemplate>
+
+                        <Button
+                        materialDesign:RippleAssist.RippleSizeMultiplier="2"
+                        Command="{Binding DataContext.ChooseFileCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                        CommandParameter="{Binding}"
+                        Margin="5 5 10 0"
+                        x:Name="FileButton"
+                        Height="130"
+                        >
+
+                            <Grid>
+
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="4*"/>
+                                    <RowDefinition Height="1*"/>
+                                </Grid.RowDefinitions>
+
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+
+                                <Image Source="{Binding ImageSource}" Height="45" Width="45"/>
+
+                                <TextBlock 
+                        Text="{Binding FileSimplifiedName}" 
+                        FontFamily="Product Sans" 
+                        FontSize="16" 
+                        Foreground="Black" HorizontalAlignment="Left" 
+                        VerticalAlignment="Center"
+                        Grid.Row="1"
+                                />
+
+
+                            </Grid>
+
+                        </Button>
+
+                        <DataTemplate.Triggers>
+                            <DataTrigger 
+                             Binding="{Binding IsSelected}" 
+                             Value="True">
+
+                                <Setter Property="Background"  TargetName="FileButton" Value="Red"/>
+                                
+                            </DataTrigger>
+                        </DataTemplate.Triggers>
+
+                    </DataTemplate>
+
+                </ItemsControl.ItemTemplate>
+
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Columns="5"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                
+            </ItemsControl>
         </ScrollViewer>
 
-
+        <!--Status and actions at the bottom-->
+        
         <Grid Grid.Column="0" Grid.Row="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition></ColumnDefinition>
-                <ColumnDefinition></ColumnDefinition>
-                <ColumnDefinition></ColumnDefinition>
-                <ColumnDefinition></ColumnDefinition>
-                <ColumnDefinition Width="2*"></ColumnDefinition>
-                <ColumnDefinition ></ColumnDefinition>
-            </Grid.ColumnDefinitions>
-            <Grid Grid.Column="4" Grid.Row="0">
-                <Grid.RowDefinitions>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                </Grid.RowDefinitions>
-                <TextBlock Name="DownloadProgressCaption" Grid.Column="0" Grid.Row="1" Foreground="Black" FontFamily="Product Sans" FontSize="18"></TextBlock>
-                <TextBlock Name="StatusCaption" Grid.Column="0" Grid.Row="0" Foreground="Black" FontFamily="Product Sans" FontSize="18" Text="Waiting for an action..."></TextBlock>
+            
+            <Grid>
+
+                <Grid.ColumnDefinitions>
+                    
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition Width="2*"></ColumnDefinition>
+                    <ColumnDefinition ></ColumnDefinition>
+                    
+                </Grid.ColumnDefinitions>
+
+                <Grid Grid.Column="4" Grid.Row="0">
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Name="StatusCaption" 
+                       Grid.Column="0" Grid.Row="0" 
+                       Foreground="Black" 
+                       FontFamily="Product Sans" FontSize="16" 
+                       Text="{Binding CurrentState}"
+                    />
+
+                </Grid>
+
+
+                <Button Style="{DynamicResource MaterialDesignFloatingActionButton}" 
+                Grid.Column="1" Grid.Row="1"
+                Background="White" 
+                BorderBrush="White"
+                Command="{Binding DeleteFileCommand}">
+
+                    <Grid>
+                        <Image Source="Images/Icon_delete.png" 
+                       Grid.Column="1" Grid.Row="1"
+                       Width="35">
+
+                        </Image>
+                    </Grid>
+
+                </Button>
+
+                <Button 
+            Style="{DynamicResource MaterialDesignFloatingActionButton}" 
+            Grid.Column="0" Grid.Row="0"
+            Background="White"
+            BorderBrush="White"
+            Command="{Binding UploadFileCommand}">
+
+                    <Grid>
+                        <Image Source="Images/Icon_upload.png" 
+                       Grid.Column="0" Grid.Row="0" 
+                       Width="50"></Image>
+                    </Grid>
+
+                </Button>
+
+                <Button Style="{DynamicResource MaterialDesignFloatingActionButton}"  
+                Grid.Column="2" 
+                Grid.Row="1" 
+                Background="White" 
+                BorderBrush="White" 
+                Command="{Binding DownloadFileCommand}">
+
+                    <Grid>
+                        <Image Source="Images/Icon_download.png" Grid.Column="2" Grid.Row="1" Width="45"></Image>
+                    </Grid>
+
+                </Button>
+
+                <fa:ImageAwesome 
+            Name="MainSpinner" 
+            Icon="Spinner" 
+            Spin="{Binding IsActionRunning}" 
+            Height="48" Width="35" Grid.Column="3" />
+
+
             </Grid>
             
-            <Button Style="{DynamicResource 
-MaterialDesignFloatingActionButton}" Grid.Column="1" Grid.Row="1" Click="DeleteButton_ClickAsync" Background="White" BorderBrush="White">
-                <Grid>
-                    <Image Source="Images/Icon_delete.png" Grid.Column="1" Grid.Row="1" Width="35"></Image>
-                </Grid>  
-            </Button>
-
-            <Button Style="{DynamicResource 
-MaterialDesignFloatingActionButton}" Grid.Column="0" Grid.Row="0" Click="UploadButton_ClickAsync" Background="White" BorderBrush="White">
-                <Grid>
-                    <Image Source="Images/Icon_upload.png" Grid.Column="0" Grid.Row="0" Width="50"></Image>
-                </Grid>
-            </Button>
-
-            <Button Style="{DynamicResource 
-MaterialDesignFloatingActionButton}"  Grid.Column="2" Grid.Row="1" Click="DownloadButton_Click" Background="White" BorderBrush="White">
-                <Grid>
-                    <Image Source="Images/Icon_download.png" Grid.Column="2" Grid.Row="1" Width="45"></Image>
-                </Grid>
-            </Button>
-            
-            <Grid Grid.Column="5" Grid.Row="0">
-                <Grid.RowDefinitions>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                </Grid.RowDefinitions>
-                <Image Source="Images\Icon_exit.png" Grid.Row="0" Height="25" MouseDown="ExitImage_MouseDown"></Image>
-                <Image Source="Images\Icon_minimize.png" Grid.Row="1" Height="25" MouseDown="MinimizeImage_MouseDown"></Image>
-            </Grid>
-            <fa:ImageAwesome Name="MainSpinner" Icon="Spinner" Spin="False" Height="48" Width="35" Grid.Column="3" />
         </Grid>
+
     </Grid>
 
 
