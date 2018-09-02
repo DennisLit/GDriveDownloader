@@ -36,6 +36,11 @@ namespace DriveDownloader
 
         public static string DownloadComplete => "Download complete.";
 
+        public static string LoginState => "Logging In...";
+
+        public static string UpdateFilesState => "Updating files list...";
+
+        public static string SignOutHint => "To delete all of your sign-in data and close the app, click button twice.";
 
 
     }

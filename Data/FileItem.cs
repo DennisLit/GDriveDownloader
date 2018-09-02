@@ -1,5 +1,9 @@
-﻿namespace DriveDownloader
+﻿using PropertyChanged;
+
+namespace DriveDownloader
 {
+    [AddINotifyPropertyChangedInterface]
+
     public class FileItem
     {
         public string Id { get; set; }

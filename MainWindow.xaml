@@ -10,30 +10,49 @@
         mc:Ignorable="d"
         Background="White"
         Name="DriveMainWindow"
-        Title="MainWindow" Height="450" Width="930">
+        Title="Drive Downloader" Height="450" Width="930">
 
     
     <Grid>
 
         <Grid.RowDefinitions>
             <RowDefinition Height="6*"></RowDefinition>
-            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="1.3*"></RowDefinition>
         </Grid.RowDefinitions>
 
         <ScrollViewer>
-            <ItemsControl ItemsSource="{Binding Files}">
+            <ItemsControl ItemsSource="{Binding Files}" VirtualizingPanel.IsVirtualizing="True">
                 <ItemsControl.ItemTemplate>
 
                     <DataTemplate>
 
                         <Button
-                        materialDesign:RippleAssist.RippleSizeMultiplier="2"
                         Command="{Binding DataContext.ChooseFileCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                         CommandParameter="{Binding}"
                         Margin="5 5 10 0"
                         x:Name="FileButton"
                         Height="130"
                         >
+                            <Button.Style>
+                                
+                                <Style TargetType="Button" 
+                                       BasedOn="{StaticResource MaterialDesignRaisedDarkButton}"
+                                       >
+
+                                    <Style.Triggers>
+                                        
+                                        <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                                            <Setter Property="Background" Value="DeepSkyBlue"/>
+                                        </DataTrigger>
+
+                                        <DataTrigger Binding="{Binding IsSelected}" Value="false">
+                                            <Setter Property="Background" Value="White"/>
+                                        </DataTrigger>
+
+                                    </Style.Triggers>
+                                </Style>
+                                
+                            </Button.Style>
 
                             <Grid>
 
@@ -49,12 +68,12 @@
                                 <Image Source="{Binding ImageSource}" Height="45" Width="45"/>
 
                                 <TextBlock 
-                        Text="{Binding FileSimplifiedName}" 
-                        FontFamily="Product Sans" 
-                        FontSize="16" 
-                        Foreground="Black" HorizontalAlignment="Left" 
-                        VerticalAlignment="Center"
-                        Grid.Row="1"
+                                Text="{Binding FileSimplifiedName}" 
+                                FontFamily="Product Sans" 
+                                FontSize="16" 
+                                Foreground="Black" HorizontalAlignment="Left" 
+                                VerticalAlignment="Center"
+                                Grid.Row="1"
                                 />
 
 
@@ -62,23 +81,13 @@
 
                         </Button>
 
-                        <DataTemplate.Triggers>
-                            <DataTrigger 
-                             Binding="{Binding IsSelected}" 
-                             Value="True">
-
-                                <Setter Property="Background"  TargetName="FileButton" Value="Red"/>
-                                
-                            </DataTrigger>
-                        </DataTemplate.Triggers>
-
                     </DataTemplate>
 
                 </ItemsControl.ItemTemplate>
 
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <UniformGrid Columns="5"/>
+                        <UniformGrid Columns="7"/>
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
                 
@@ -89,7 +98,7 @@
         
         <Grid Grid.Column="0" Grid.Row="1">
             
-            <Grid>
+            <Grid Margin="0 0 0 10">
 
                 <Grid.ColumnDefinitions>
                     
@@ -97,23 +106,19 @@
                     <ColumnDefinition></ColumnDefinition>
                     <ColumnDefinition></ColumnDefinition>
                     <ColumnDefinition></ColumnDefinition>
-                    <ColumnDefinition Width="2*"></ColumnDefinition>
-                    <ColumnDefinition ></ColumnDefinition>
-                    
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition Width="3*"></ColumnDefinition>
+
                 </Grid.ColumnDefinitions>
 
-                <Grid Grid.Column="4" Grid.Row="0">
-
-                    <Grid.RowDefinitions>
-                        <RowDefinition></RowDefinition>
-                        <RowDefinition></RowDefinition>
-                    </Grid.RowDefinitions>
+                <Grid Grid.Column="5" Grid.Row="0">
 
                     <TextBlock Name="StatusCaption" 
                        Grid.Column="0" Grid.Row="0" 
                        Foreground="Black" 
-                       FontFamily="Product Sans" FontSize="16" 
+                       FontFamily="Product Sans" FontSize="18" 
                        Text="{Binding CurrentState}"
+                       TextWrapping="Wrap"
                     />
 
                 </Grid>
@@ -123,6 +128,7 @@
                 Grid.Column="1" Grid.Row="1"
                 Background="White" 
                 BorderBrush="White"
+                Margin="0 0 0 4"
                 Command="{Binding DeleteFileCommand}">
 
                     <Grid>
@@ -136,11 +142,12 @@
                 </Button>
 
                 <Button 
-            Style="{DynamicResource MaterialDesignFloatingActionButton}" 
-            Grid.Column="0" Grid.Row="0"
-            Background="White"
-            BorderBrush="White"
-            Command="{Binding UploadFileCommand}">
+                Style="{DynamicResource MaterialDesignFloatingActionButton}" 
+                Grid.Column="0" Grid.Row="0"
+                Background="White"
+                BorderBrush="White"
+                Margin="0 0 0 4"
+                Command="{Binding UploadFileCommand}">
 
                     <Grid>
                         <Image Source="Images/Icon_upload.png" 
@@ -154,7 +161,8 @@
                 Grid.Column="2" 
                 Grid.Row="1" 
                 Background="White" 
-                BorderBrush="White" 
+                BorderBrush="White"
+                Margin="0 0 0 4"
                 Command="{Binding DownloadFileCommand}">
 
                     <Grid>
@@ -163,11 +171,25 @@
 
                 </Button>
 
+                <Button Style="{DynamicResource MaterialDesignFloatingActionButton}"  
+                Grid.Column="3" 
+                Grid.Row="1" 
+                Background="White" 
+                BorderBrush="White"
+                Margin="0 0 0 4"
+                Command="{Binding SignOutCommand}">
+
+                    <Grid>
+                        <Image Source="Images/Icon_signout.png" Grid.Column="2" Grid.Row="1" Width="33"></Image>
+                    </Grid>
+
+                </Button>
+                
                 <fa:ImageAwesome 
             Name="MainSpinner" 
             Icon="Spinner" 
             Spin="{Binding IsActionRunning}" 
-            Height="48" Width="35" Grid.Column="3" />
+            Height="48" Width="35" Grid.Column="4" />
 
 
             </Grid>

@@ -137,4 +137,3 @@ C:\Users\Denni\Desktop\C#\GitHubProjects\DriveDownloader\obj\Debug\DriveDownload
 C:\Users\Denni\Desktop\C#\GitHubProjects\DriveDownloader\obj\Debug\DriveDownloader.exe.manifest
 C:\Users\Denni\Desktop\C#\GitHubProjects\DriveDownloader\obj\Debug\DriveDownloader.application
 C:\Users\Denni\Desktop\C#\GitHubProjects\DriveDownloader\obj\Debug\DriveDownloader.csproj.CopyComplete
-C:\Users\Denni\Desktop\C#\GitHubProjects\DriveDownloader\obj\Debug\GeneratedInternalTypeHelper.g.cs

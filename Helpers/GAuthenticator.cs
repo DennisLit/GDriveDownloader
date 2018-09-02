@@ -36,14 +36,13 @@ namespace DriveDownloader
         {
             try
             {
-
                 using (var stream =
                         new FileStream("AuthCredentials.json", FileMode.Open, FileAccess.Read))
                 {
-                    string credPath = System.Environment.GetFolderPath(
-                        System.Environment.SpecialFolder.Personal);
+                    string credPath = Environment.GetFolderPath(
+                        Environment.SpecialFolder.Personal);
 
-                    credPath = System.IO.Path.Combine(credPath, ".credentials/Responces.json");
+                    credPath = Path.Combine(credPath, ".credentials/Responces.json");
                     Credential = 
                         GoogleWebAuthorizationBroker.AuthorizeAsync(
                         GoogleClientSecrets.Load(stream).Secrets,

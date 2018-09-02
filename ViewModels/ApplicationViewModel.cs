@@ -17,7 +17,6 @@ namespace DriveDownloader
     {
         public ApplicationViewModel()
         {
-            Files = null;
             OnStartup();
         }
 
@@ -45,6 +44,11 @@ namespace DriveDownloader
         /// </summary>
         public bool IsActionRunning { get; set; }
 
+        /// <summary>
+        /// To sign out, user clicks sign out button twice. 1 - clicked once, 2 - twice
+        /// </summary>
+        public int SignOutState { get; set; }
+
         #endregion
 
         #region Commands
@@ -57,18 +61,46 @@ namespace DriveDownloader
 
         public ICommand ChooseFileCommand { get { return new RelayCommandWithParam(ChooseFile); } }
 
+        public ICommand SignOutCommand { get { return new RelayCommand(SignOut); } }
+
         #endregion
 
         #region Command methods
 
+        private void SignOut()
+        {
+            SignOutState += 1;
+
+            if (SignOutState == 2)
+            {
+                var CredsLocation = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
+                CredsLocation += "\\.credentials";
+
+                var DirToDelete = new DirectoryInfo(CredsLocation);
+
+                DirToDelete.Attributes = DirToDelete.Attributes & ~FileAttributes.ReadOnly;
+
+                DirToDelete.Delete(true);
+
+                Environment.Exit(0);
+            }
+            else
+                OnLogOut();
+
+        }
+
         private async void DeleteFile()
         {
+            if (Files == null)
+                return;
+
             IsActionRunning = true;
 
             //refresh token if it's expired
 
             if ((DateTime.UtcNow - GAuthenticator.WhenTokenReceived).Minutes >= 5)
                 await GAuthenticator.RefreshToken();
+
 
             foreach (var file in Files)
             {
@@ -85,7 +117,6 @@ namespace DriveDownloader
                 }
             }
 
-            Files.Clear();
             Files = UIItemsCreator.NewFileItemsList();
 
             IsActionRunning = false;
@@ -102,6 +133,11 @@ namespace DriveDownloader
 
         private async void UploadFile()
         {
+            // if user is not logged in 
+
+            if (GAuthenticator.Service == null)
+                return;
+
             IsActionRunning = true;
 
             var dialog = new OpenFileDialog();
@@ -114,7 +150,6 @@ namespace DriveDownloader
 
                await UploadFileASync(dialog.FileName);
 
-                Files.Clear();
                 Files = UIItemsCreator.NewFileItemsList();
             }
             else
@@ -125,6 +160,8 @@ namespace DriveDownloader
 
         private async void DownloadFile()
         {
+            if (Files == null)
+                return;
 
             IsActionRunning = true;
 
@@ -148,13 +185,28 @@ namespace DriveDownloader
 
         #region Helper Methods
 
+        private void OnLogOut()
+        {
+            CurrentState = ResourceStrings.SignOutHint;
+        }
+
         private async void OnStartup()
         {
+            IsActionRunning = true;
+
+            CurrentState = ResourceStrings.LoginState;
+
             await Task.Run(() => GAuthenticator.Authenticate("Drive downloader"));
 
-            var filesResult = UIItemsCreator.NewFileItemsList();
+            CurrentState = ResourceStrings.UpdateFilesState;
+
+            var filesResult =  await Task.Run(() => UIItemsCreator.NewFileItemsList());
 
             Files = (filesResult == null) ? null : filesResult;
+
+            CurrentState = ResourceStrings.DefaultActionState;
+
+            IsActionRunning = false;
 
         }
 
@@ -165,7 +217,7 @@ namespace DriveDownloader
             {
                 if (item.Id == Id)
                 {
-                    item.IsSelected = true;
+                    item.IsSelected = !item.IsSelected;
                     return;
                 }
 
@@ -219,7 +271,6 @@ namespace DriveDownloader
                 });
             
         }
-
 
         private async Task UploadFileASync(string filePath)
         {

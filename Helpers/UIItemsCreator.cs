@@ -36,8 +36,8 @@ namespace DriveDownloader
         private static string GetSimplifiedFileName(string fileName)
         {
             //bad practice right there
-            if (fileName.Length > 10)
-                return fileName.Substring(0, 10) + "...";
+            if (fileName.Length > 9)
+                return fileName.Substring(0, 9) + "...";
             else
                 return fileName;
 
